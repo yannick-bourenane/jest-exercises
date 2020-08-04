@@ -1,24 +1,30 @@
 // setPrice(item: Object, price: Number) => item: Object
 const setPrice = (item, price) => {
   // TODO: implement
+  const copy = Object.assign({}, item);
+  copy.price = price;
+  return copy;
 };
 
 // addToCart(cart: Array, item: Object) => cart: Array
 const addToCart = (cart, item) => {
   // TODO: implement
+  const copy = [...cart];
+  copy.push(item);
+  return copy;
 };
 
-describe('setPrice()', () => {
-  it('should set the price in the given item object, immutably.', () => {
+describe("setPrice()", () => {
+  it("should set the price in the given item object, immutably.", () => {
     const item = {
-      name: 'test',
+      name: "test",
       price: 30,
     };
     const copy = Object.assign({}, item);
 
     const actual = setPrice(item, 50);
     const expected = {
-      name: 'test',
+      name: "test",
       price: 50,
     };
 
@@ -27,11 +33,11 @@ describe('setPrice()', () => {
   });
 });
 
-describe('addToCart()', () => {
-  it('should add item to cart, immutably', () => {
+describe("addToCart()", () => {
+  it("should add item to cart, immutably", () => {
     const originalCart = [];
     const item = {
-      name: 'Violator',
+      name: "Violator",
       price: 30,
     };
     const copy = originalCart.slice();
