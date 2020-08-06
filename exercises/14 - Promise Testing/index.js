@@ -24,20 +24,34 @@ export const defaultFetchHeaders = {
 };
 
 export const camelCase = (input) => {
-  // TODO: implement
+  return typeof input === "string"
+    ? input.charAt(0).toLowerCase() + input.slice(1)
+    : input;
 };
 
-const normalizeCasing = (value) => {
+export const normalizeCasing = (value) => {
   // TODO: implement
+  if (value === null) return null;
+  if (Array.isArray(value)) return value.map((el) => normalizeCasing(el));
+  if (typeof value === "object") {
+    return Object.keys(value).reduce((acc, cValue) => {
+      console.log(acc);
+      return { ...acc, [camelCase(cValue)]: normalizeCasing(value[cValue]) };
+    }, {});
+  }
   return value;
 };
 
 const callApi = (url = "", options = {}) => {
   // TODO: implement
-  const apiUrl = /https?:\/\//.test(url) ? url : `${LOCATION_ORIGIN}${url}`;
+  //const apiUrl = /https?:\/\//.test(url) ? url : `${LOCATION_ORIGIN}${url}`;
+  const apiUrl = `${LOCATION_ORIGIN}${url}`;
   const fetchOptions = Object.assign({}, defaultFetchHeaders, options);
 
   return fetch(apiUrl, fetchOptions).then((resp) => {
+    if (resp.status === 400) {
+      throw new Error("SyntaxError: Should receive a JSON");
+    }
     if (resp.status !== 204) {
       return resp.json().then((json) => {
         const results = { json: normalizeCasing(json), resp };
